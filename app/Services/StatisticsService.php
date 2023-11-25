@@ -34,12 +34,25 @@ class StatisticsService
         if(is_null(Company::find($id))){
             throw new Exception("Company not found", 404);
         }
-        return Comment::where('company_id',$id)->get();
+        return DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->select('comments.*',)
+            ->where('users.deleted_at',null)
+            ->where('comments.company_id',$id)
+            ->where('comments.deleted_at', null)
+            ->get();
     }
 
     protected function getRateByID (int $id){
         //Получение рейтинга компании
-        $rate= DB::table('comments',)->where('company_id',$id)->avg('score');
+        $rate= DB::table('comments',)
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->join('companies', 'comments.company_id', '=', 'companies.id')
+            ->where('comments.deleted_at', null)
+            ->where('users.deleted_at',null)
+            ->where('companies.deleted_at',null)
+            ->where('comments.company_id',$id)
+            ->avg('score');
         $company = Company::find($id);
         //Если компании нет
         if(is_null($company)){
@@ -52,7 +65,17 @@ class StatisticsService
 
     //Получение рейтинга компаний
     protected function getCompaniesByRate (){
-        $rating = DB::table('comments')->select(DB::raw('company_id as company, AVG(score) as rate'))->groupBy('company_id')->limit(10)->orderByDesc('rate')->get();
+        $rating = DB::table('comments')
+            ->select(DB::raw('company_id as company, AVG(score) as rate'))
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->join('companies', 'comments.company_id', '=', 'companies.id')
+            ->where('comments.deleted_at', null)
+            ->where('users.deleted_at',null)
+            ->where('companies.deleted_at',null)
+            ->groupBy('company')
+            ->limit(10)
+            ->orderByDesc('rate')
+            ->get();
         //Добавление к информации о компаниях ответу
         foreach ($rating as $item) {
             $item->company = Company::find($item->company);

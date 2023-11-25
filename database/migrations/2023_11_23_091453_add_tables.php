@@ -51,8 +51,8 @@ return new class extends Migration
             //Использовение "Мягкого удаления"
             $table->softDeletes();
             //Создание внешних ключей
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 

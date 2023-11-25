@@ -22,7 +22,7 @@ class UserController extends Controller
             'name'=>['string','required','min:3', 'max:40'],
             'surname'=>['string','required','min:3', 'max:40'],
             'phone'=>['string','required','regex:/^\+7\d{10}$/','min:12', 'max:12'],
-            'avatar'=>['required','mimes:image:jpg,jpeg,png','max:2048']
+            'avatar'=>['required','mimes:image:jpg,png','max:2048']
         ]);
         //Обработка изображения
         if(\request()->hasFile('avatar')){
@@ -45,7 +45,7 @@ class UserController extends Controller
             'name'=>['string','required','min:3', 'max:40'],
             'surname'=>['string','required','min:3', 'max:40'],
             'phone'=>['string','required','regex:/^\+7\d{10}$/','min:12', 'max:12'],
-            'avatar'=>['required','mimes:image:jpg,jpeg,png','max:2048']
+            'avatar'=>['sometimes','mimes:image:jpg,png','max:2048']
         ]);
         //Обработка изображения
         if(request()->hasFile('avatar')){

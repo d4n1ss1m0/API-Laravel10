@@ -23,7 +23,7 @@ class CompanyController extends Controller
         $data = request()->validate([
             'title'=>['string','required','min:3', 'max:40'],
             'description'=>['string','required','min:150', 'max:400'],
-            'logo'=>['required','mimes:image:jpg,jpeg,png','max:3072']
+            'logo'=>['required','mimes:image:png','max:3072']
         ]);
         //Обработка изображения
         if(\request()->hasFile('logo')){
@@ -45,7 +45,7 @@ class CompanyController extends Controller
         $data = request()->validate([
             'title'=>['string','required','min:3', 'max:40'],
             'description'=>['string','required','min:150', 'max:400'],
-            'logo'=>['required','mimes:image:jpg,jpeg,png','max:3072']
+            'logo'=>['sometimes','mimes:image:png','max:3072']
         ]);
         //Обработка изображения
         if(request()->hasFile('logo')){
